@@ -1,0 +1,69 @@
+﻿@page "/home"
+@using System.ComponentModel.DataAnnotations
+@inject ManipuladorVersao manipuladorVersao
+@inject IJSRuntime js
+
+<PageTitle>Gerenciador de Versão</PageTitle>
+
+@* <MudGrid Class="w-50" Justify="Justify.Center">
+    <MudItem xs="12">
+        <MudTextField T="string" Label="Número" @bind-Value="numero" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers" Class="mb-4" />
+    </MudItem>
+    <MudItem xs="12">
+        <MudTextField T="string" Label="Release" @bind-Value="release" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers" Class="mb-4" />
+    </MudItem>
+    <MudItem xs="12">
+        <MudTextField T="string" Label="Versão Teste" @bind-Value="versao" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers" Class="mb-4" />
+    </MudItem>
+    <MudItem xs="12">
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="GerarVersao" Class="mt-3 w-100">
+            Gerar Versão
+        </MudButton>
+    </MudItem>
+</MudGrid> *@
+<button onclick="GerarVersao()">Teste</button>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="() => GerarVersao()" Class="mt-3">
+    Gerar Versão
+</MudButton>
+
+<MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="BaixarArquivo" >
+    Baixar Versão
+</MudButton>
+
+@code {  
+    [Required(ErrorMessage = "Número é obrigatório")]
+    private string numero;
+
+    [Required(ErrorMessage = "Versão é obrigatória")]
+    private string versao;
+
+    [Required(ErrorMessage = "Release é obrigatório")]
+    private string release;
+
+    private byte[] zipArquivo;
+    private bool arquivoPronto;
+
+    // private void GerarVersao()
+    // {
+    //     Console.WriteLine("GerarVersao foi chamado");  // Adicionado para teste
+    //     zipArquivo = manipuladorVersao.GerarVersao(numero, versao, release);
+    //     arquivoPronto = zipArquivo != null && zipArquivo.Length > 0;
+    // }
+    private void GerarVersao()
+    {
+        Console.WriteLine("GerarVersao foi chamado");  // Adicionado para teste
+        zipArquivo = new byte[] { 1, 2, 3 }; // Simulação de um arquivo ZIP para teste
+        arquivoPronto = zipArquivo.Length > 0;
+    }
+
+
+    private async Task BaixarArquivo()
+    {
+        if (zipArquivo != null)
+        {
+            var base64 = Convert.ToBase64String(zipArquivo);
+            var arquivoDados = $"data:application/zip;base64,{base64}";
+            await js.InvokeVoidAsync("downloadFile", arquivoDados, "versao.zip");
+        }
+    }
+}

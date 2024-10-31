@@ -1,0 +1,29 @@
+# Ignorar arquivos e diretórios específicos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos de log
+
+
+# Ignorar arquivos de backup
+*.bak
+*.tmp
+
+# Ignorar arquivos de configuração de IDE
+.vscode/
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.pubxml
+# Ignorar arquivos binários e objetos compilados
+*.exe
+*.dll
+*.so
+*.dylib
+*.pdb
+
+# Ignorar diretórios específicos do projeto (como .NET)
+bin/
+obj/
