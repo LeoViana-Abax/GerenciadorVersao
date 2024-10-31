@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Style="background: linear-gradient(90deg,#A9A9A9,#4682B4,#B0C4DE);">
+        <MudGrid Justify="Justify.Center">
+            <MudText Typo="Typo.h5">Gerenciador de versão</MudText>
+        </MudGrid>
+        <MudSpacer />
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
