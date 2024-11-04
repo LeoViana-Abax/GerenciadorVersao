@@ -7,6 +7,29 @@ namespace Infra.Core.Manipuladores
 {
     public class ManipuladorArquivos
     {
+        public Tuple<string, string, string> BuscarDadosUltimaRelease(string caminhoXml)
+        {
+            caminhoXml = Path.Combine(caminhoXml, "RELEASE.xml");
+
+            if (!File.Exists(caminhoXml))
+                return null; 
+
+            XDocument xmlDoc = XDocument.Load(caminhoXml);
+
+            XElement? ultimoBuild = xmlDoc.Descendants(PatchVt.Build).LastOrDefault();
+
+            if (ultimoBuild != null)
+            {                
+                string numero = ultimoBuild.Element(PatchVt.Numero)?.Value ?? string.Empty;
+                string release = ultimoBuild.Element(PatchVt.Release)?.Value ?? string.Empty;
+                string versaoTeste = ultimoBuild.Element(PatchVt.VersaoTeste)?.Value ?? string.Empty;
+               
+                return Tuple.Create(numero, release, versaoTeste);
+            }
+
+            return null;
+        }
+
         public void EditarXml(string caminhoXml, string numero, string release, string versaoTeste)
         {
             caminhoXml = caminhoXml + @"RELEASE.xml";
@@ -52,6 +75,16 @@ namespace Infra.Core.Manipuladores
 
             string jsonNovo = JsonSerializer.Serialize(versoes, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(caminhoArquivo, jsonNovo);
+        }
+        public byte[] BuscarArquivo(string nomeArquivo,string _caminhoVersoes)
+        {
+            string caminhoArquivo = Path.Combine(_caminhoVersoes, nomeArquivo);
+                        
+            if (!File.Exists(caminhoArquivo))
+            {
+                return null; 
+            }            
+            return File.ReadAllBytes(caminhoArquivo);
         }
     }
 }

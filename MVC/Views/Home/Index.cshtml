@@ -1,0 +1,114 @@
+﻿@model ArquivosViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de Versão</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos para o spinner de carregamento */
+        #loadingSpinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingSpinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div>
+
+    <div class="container-fluid d-flex justify-content-center">
+        <h2 class="text-center w-100 mb-12" style="background: linear-gradient(90deg, #A9A9A9, #4682B4, #B0C4DE); box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); color: white; padding: 10px; border-radius: 5px;">
+            Gerenciador de Versão
+        </h2>
+    </div>
+    <div class="container d-flex justify-content-center">
+        <div class="w-50">
+            <!-- Formulário para gerar versão -->
+            <form asp-action="GerarVersao" method="post" id="gerarVersaoForm">
+                <div class="mb-3">
+                    <label for="numero" class="form-label">Número</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                        <input type="text" class="form-control" id="numero" name="numero" placeholder="Número" value="@Model.Numero">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="release" class="form-label">Release</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                        <input type="text" class="form-control" id="release" name="release" placeholder="Release" value="@Model.Release">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="versao" class="form-label">Versão Teste</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                        <input type="text" class="form-control" id="versao" name="versao" placeholder="Versão Teste" value="@Model.VersaoTeste">
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Gerar Versão</button>
+                </div>
+            </form>
+
+            <!-- Listagem de arquivos com ícones para download e exclusão -->
+            <h4 class="mt-4">Versões Disponíveis</h4>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome do Arquivo</th>
+                        <th scope="col" class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var arquivo in Model.Arquivos)
+                    {
+                        <tr>
+                            <td>@arquivo.Nome</td>
+                            <td class="text-center">
+                                <a asp-action="DownloadArquivo" asp-route-nomeArquivo="@arquivo.Nome" title="Baixar" class="text-success mx-2">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <a asp-action="ExcluirArquivo" asp-route-nomeArquivo="@arquivo.Nome" title="Excluir" class="text-danger mx-2">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Esconder spinner no início
+            $('#loadingSpinner').hide();
+
+            // Mostrar o spinner quando o formulário for enviado
+            $('#gerarVersaoForm').on('submit', function () {
+                $('#loadingSpinner').css('display', 'flex');
+            });
+        });
+    </script>
+</body>
+</html>
